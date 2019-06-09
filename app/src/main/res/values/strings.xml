@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AudioMessanger</string>
+    <string name="recording">Recording</string>
+    <string name="stop_and_save">Stop and save</string>
+    <string name="url_mp3">Url mp3</string>
+    <string name="id_mp3">Id mp3</string>
+</resources>
