@@ -1,5 +1,6 @@
 package com.fantastic.audiomessanger.model.dataBase.dao
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
@@ -10,7 +11,7 @@ import com.fantastic.audiomessanger.model.dataBase.entity.Person
 interface PersonDao {
 
     @Query(value = "SELECT * FROM Person")
-    fun getAllPersons() : List<Person>
+    fun getAllPersons() : LiveData<List<Person>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(person : Person)

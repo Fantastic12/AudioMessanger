@@ -1,4 +1,4 @@
-package com.fantastic.audiomessanger.ui.conversationFragment
+package com.fantastic.audiomessanger.ui.adapters
 
 import android.media.MediaPlayer
 import android.support.v7.widget.RecyclerView

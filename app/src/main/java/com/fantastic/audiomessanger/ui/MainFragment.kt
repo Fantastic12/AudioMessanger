@@ -1,4 +1,4 @@
-package com.fantastic.audiomessanger.ui.mainFragment
+package com.fantastic.audiomessanger.ui
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle

@@ -5,6 +5,9 @@ import android.arch.persistence.room.*
 @Entity
 data class Person(
     @PrimaryKey(autoGenerate = true) var idPerson : Int = 0,
-    val namePerson : String?,
+    var namePerson : String?,
     val numberPerson : Int?
-)
+){
+    @Ignore
+    constructor():this(0,"",123)
+}

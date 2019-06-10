@@ -5,5 +5,4 @@ import android.arch.lifecycle.AndroidViewModel
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-
 }
