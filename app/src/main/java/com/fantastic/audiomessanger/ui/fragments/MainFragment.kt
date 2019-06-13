@@ -3,7 +3,7 @@ package com.fantastic.audiomessanger.ui.fragments
 import android.app.Application
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -16,22 +16,27 @@ import com.fantastic.audiomessanger.R
 import com.fantastic.audiomessanger.databinding.MainFragmentBinding
 import com.fantastic.audiomessanger.interfaces.ListenerFragment
 import com.fantastic.audiomessanger.model.dataBase.entity.Conversation
-import com.fantastic.audiomessanger.ui.activites.AddConversationActivity
 import com.fantastic.audiomessanger.ui.adapters.ConversationListAdapter
 import com.fantastic.audiomessanger.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.main_fragment.view.*
+import com.fantastic.audiomessanger.ui.fragments.MainFragment.OpenNewFragment as OpenNewFragment1
 
 class MainFragment : Fragment(), ListenerFragment {
+
+    private lateinit var openNewFragment : OpenNewFragment
 
     private var adapter : ConversationListAdapter? = null
     private var recyclerView : RecyclerView? = null
     private lateinit var linearLayoutManager : LinearLayoutManager
+    private lateinit var viewModel : MainViewModel
 
     companion object {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    interface OpenNewFragment{
+        fun openFragment()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
             : View {
@@ -52,8 +57,13 @@ class MainFragment : Fragment(), ListenerFragment {
 
     override fun onListener(view: View) {
         view.fab.setOnClickListener {
-            startActivity(Intent(context, AddConversationActivity::class.java))
+            openNewFragment.openFragment()
         }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        openNewFragment = activity as OpenNewFragment
     }
 
     private fun initRecycleView(view: View){
