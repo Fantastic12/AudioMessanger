@@ -1,12 +1,20 @@
 <resources>
-    <string name="app_name">AudioMessanger</string>
+    <string name="app_name">AudioMessenger</string>
     <string name="recording">Recording</string>
     <string name="stop_and_save">Stop and save</string>
     <string name="url_mp3">Url mp3</string>
     <string name="id_mp3">Id mp3</string>
     <string name="add_person">Add Person</string>
-    <string name="numberperson">numberPerson</string>
-    <string name="nameperson">namePerson</string>
     <string name="idperson">idPerson</string>
     <string name="person">Person #</string>
+    <string name="number_of_audio">Number of audio:</string>
+    <string name="number_of_person">Number of person:</string>
+    <string name="name">Name</string>
+    <string name="nameperson">NamePerson</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_name_conversation">Enter name conversation</string>
+    <string name="add">Add</string>
+    <string name="name_conversation">Name</string>
+    <string name="delete_all_conversations">Delete all conversations</string>
 </resources>

@@ -1,6 +1,7 @@
-package com.fantastic.audiomessanger.ui
+package com.fantastic.audiomessanger.ui.fragments
 
 import android.Manifest
+import android.app.Application
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
@@ -15,14 +16,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.fantastic.audiomessanger.R
+import com.fantastic.audiomessanger.interfaces.ListenerFragment
+import com.fantastic.audiomessanger.interfaces.MainNavigator
 import com.fantastic.audiomessanger.model.dataBase.entity.AudioMessage
 import com.fantastic.audiomessanger.model.dataBase.entity.Person
 import com.fantastic.audiomessanger.ui.adapters.AudioListAdapter
 import com.fantastic.audiomessanger.ui.adapters.PersonListAdapter
 import com.fantastic.audiomessanger.viewModel.ConversationViewModel
 import kotlinx.android.synthetic.main.conversation_fragment.view.*
+import java.lang.ref.WeakReference
 
-class ConversationFragment : Fragment() {
+class ConversationFragment : Fragment(), ListenerFragment{
 
     private var isClickedRecordAudio : Boolean = false
 
@@ -59,7 +63,7 @@ class ConversationFragment : Fragment() {
         return view
     }
 
-    private fun onListener(view: View){
+    override fun onListener(view: View) {
         view.recordAudioButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireActivity(),
                     Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireActivity(),
@@ -92,7 +96,7 @@ class ConversationFragment : Fragment() {
         recyclerView!!.layoutManager = linearLayoutManager
         recyclerView!!.adapter = adapter
 
-        adapterPerson = PersonListAdapter(ArrayList())
+        adapterPerson = PersonListAdapter(Application(), ArrayList())
         linearLayoutManagerPerson = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
         recyclerViewPerson = view.findViewById(R.id.recyclerViewPerson)
         recyclerViewPerson!!.layoutManager = linearLayoutManagerPerson

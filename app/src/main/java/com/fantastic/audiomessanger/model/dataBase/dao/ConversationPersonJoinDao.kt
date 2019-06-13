@@ -17,7 +17,7 @@ interface ConversationPersonJoinDao {
            ON conversation.id = conversationpersonjoin.conversationId
            WHERE conversationpersonjoin.personId=:personId
            """)
-    fun getConverstationsForSong(personId: Int): List<Conversation>
+    fun getConversationsForSong(personId: Int): List<Conversation>
 
     @Query("""
            SELECT * FROM person

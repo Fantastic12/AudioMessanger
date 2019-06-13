@@ -52,9 +52,9 @@ class AudioListAdapter(list : List<AudioMessage>?)
             }
             itemView.setOnClickListener {
                 Log.d("ITEM CLICKED", audioMessage.idAudioMessage.toString())
-                val mediaPlayer = MediaPlayer ()
+                val mediaPlayer = MediaPlayer()
                 try {
-                    mediaPlayer.setDataSource (audioMessage.url)
+                    mediaPlayer.setDataSource(audioMessage.url)
                     mediaPlayer.prepare()
                     mediaPlayer.start()
                     Toast.makeText (itemView.context, "Playing", Toast.LENGTH_LONG).show()

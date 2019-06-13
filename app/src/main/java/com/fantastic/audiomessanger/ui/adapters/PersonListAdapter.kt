@@ -1,14 +1,19 @@
 package com.fantastic.audiomessanger.ui.adapters
 
+import android.app.Application
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.fantastic.audiomessanger.R
 import com.fantastic.audiomessanger.model.dataBase.entity.Person
+import com.fantastic.audiomessanger.viewModel.ConversationViewModel
+import com.fantastic.audiomessanger.viewModel.MainViewModel
+import kotlinx.android.synthetic.main.item_conversation.view.*
 import kotlinx.android.synthetic.main.item_person.view.*
 
-class PersonListAdapter(list : List<Person>?)
+class PersonListAdapter(val application: Application, list : List<Person>?)
     : RecyclerView.Adapter<PersonListAdapter.PersonView>() {
 
     private var listPersons = ArrayList<Person>()
@@ -33,10 +38,9 @@ class PersonListAdapter(list : List<Person>?)
     }
 
     fun setPersons(list : List<Person>){
-        val initPosition = listPersons.size
         listPersons.clear()
         listPersons.addAll(list)
-        notifyItemRangeInserted(initPosition, listPersons.size)
+        notifyDataSetChanged()
     }
 
     inner class PersonView(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -46,6 +50,19 @@ class PersonListAdapter(list : List<Person>?)
                 namePerson.text = person.namePerson
                 idPerson.text = person.idPerson.toString()
             }
+            itemView.setOnLongClickListener {
+                itemView.deletePerson.visibility = View.VISIBLE
+                true
+            }
+            itemView.deletePerson.setOnClickListener {
+                itemView.deletePerson.visibility = View.GONE
+                deleteById(person.idPerson)
+            }
+        }
+
+        private fun deleteById(id : Int){
+            val viewModel = ConversationViewModel(application)
+            viewModel.deletePerson(id)
         }
     }
 }

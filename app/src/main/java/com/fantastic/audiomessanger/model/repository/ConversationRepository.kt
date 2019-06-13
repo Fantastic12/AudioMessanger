@@ -3,52 +3,53 @@ package com.fantastic.audiomessanger.model.repository
 import android.app.Application
 import android.arch.lifecycle.LiveData
 import com.fantastic.audiomessanger.model.dataBase.LocalDB
-import com.fantastic.audiomessanger.model.dataBase.dao.PersonDao
-import com.fantastic.audiomessanger.model.dataBase.entity.Person
+import com.fantastic.audiomessanger.model.dataBase.dao.ConversationDao
+import com.fantastic.audiomessanger.model.dataBase.entity.Conversation
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class PersonRepository(application: Application) {
+class ConversationRepository(application: Application) {
 
-    private val personDao : PersonDao
-    private val listPersons: LiveData<List<Person>>
+    private val conversationDao : ConversationDao
+    private val listConversation : LiveData<List<Conversation>>
 
     init{
         val db : LocalDB? = LocalDB.getInstance(application)
-        personDao = db?.personDao()!!
-        listPersons = personDao.getAllPersons()
+        conversationDao = db?.conversationDao()!!
+        listConversation = conversationDao.getAllConversation()
     }
 
-    fun addPerson(person: Person){
+    fun addConversation(conversation : Conversation){
         Single.fromCallable{
-            personDao.insertPerson(person)
+            conversationDao.insertConversation(conversation)
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
     }
 
-    fun getAllPersons() : LiveData<List<Person>> {
-        return listPersons
+    fun getAllConversations() : LiveData<List<Conversation>>{
+        return listConversation
     }
 
-    fun deleteAllPersons(){
+    fun deleteAllConversations(){
         Single.fromCallable{
-            personDao.deleteAllPersons()
+            conversationDao.deleteAllConversation()
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
     }
 
-    fun deletePerson(id : Int){
+    fun deleteConversation(id : Int){
         Single.fromCallable{
-            personDao.deletePerson(id)
+            conversationDao.deleteConversation(id)
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
     }
+
 
 }

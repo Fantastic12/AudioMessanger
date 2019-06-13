@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.ConversationFragment"
+            tools:context=".ui.fragments.ConversationFragment"
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools">
@@ -20,20 +20,26 @@
 
     <Button
             android:text="@string/recording"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/recordAudioButton"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
+            android:elevation="4dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/button_bg"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
     <Button
             android:text="@string/stop_and_save"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/stopAndSaveButton"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp"
+            android:elevation="4dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/button_bg"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
     />
@@ -50,12 +56,18 @@
             android:id="@+id/recyclerViewPerson"/>
     <Button
             android:text="@string/add_person"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:id="@+id/addPersonButton" app:layout_constraintStart_toEndOf="@+id/stopAndSaveButton"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toStartOf="@+id/recordAudioButton"
+            android:id="@+id/addPersonButton"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintStart_toEndOf="@+id/stopAndSaveButton"
+            android:layout_marginStart="8dp"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/recordAudioButton"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"/>
+            android:background="@drawable/button_bg"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
 

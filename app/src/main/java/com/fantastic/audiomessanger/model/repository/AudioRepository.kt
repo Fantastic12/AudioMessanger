@@ -22,7 +22,7 @@ class AudioRepository(application: Application) {
 
     fun addAudioMessage(audioMessage: AudioMessage){
         Single.fromCallable{
-            audioMessageDao.insert(audioMessage)
+            audioMessageDao.insertAudioMessage(audioMessage)
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

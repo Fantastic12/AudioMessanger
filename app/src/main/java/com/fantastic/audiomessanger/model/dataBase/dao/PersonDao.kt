@@ -14,7 +14,7 @@ interface PersonDao {
     fun getAllPersons() : LiveData<List<Person>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(person : Person)
+    fun insertPerson(person : Person)
 
     @Query(value = "DELETE FROM Person WHERE idPerson = :id")
     fun deletePerson(id : Int)

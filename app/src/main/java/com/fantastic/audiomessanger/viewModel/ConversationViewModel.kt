@@ -82,4 +82,12 @@ class ConversationViewModel(application : Application)
         personRepository.addPerson(person)
     }
 
+    fun deletePerson(id : Int){
+        personRepository.deletePerson(id)
+    }
+
+    fun deleteAllPersons(){
+
+    }
+
 }

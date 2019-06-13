@@ -14,7 +14,7 @@ interface AudioMessageDao {
     fun getAllAudioMessages() : LiveData<List<AudioMessage>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(audioMessage: AudioMessage)
+    fun insertAudioMessage(audioMessage: AudioMessage)
 
     @Query(value = "DELETE FROM AudioMessage WHERE idAudioMessage = :id")
     fun deleteAudioMessage(id : Int)
