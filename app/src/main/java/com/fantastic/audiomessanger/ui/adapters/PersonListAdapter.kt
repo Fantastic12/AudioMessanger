@@ -1,20 +1,19 @@
 package com.fantastic.audiomessanger.ui.adapters
 
-import android.app.Application
+import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.fantastic.audiomessanger.R
 import com.fantastic.audiomessanger.model.dataBase.entity.Person
-import com.fantastic.audiomessanger.viewModel.ConversationViewModel
-import com.fantastic.audiomessanger.viewModel.MainViewModel
-import kotlinx.android.synthetic.main.item_conversation.view.*
 import kotlinx.android.synthetic.main.item_person.view.*
 
-class PersonListAdapter(val application: Application, list : List<Person>?)
+class PersonListAdapter(val context : Context, list : List<Person>?)
     : RecyclerView.Adapter<PersonListAdapter.PersonView>() {
+
+    private val TAG = PersonListAdapter::class.qualifiedName
 
     private var listPersons = ArrayList<Person>()
 
@@ -61,8 +60,15 @@ class PersonListAdapter(val application: Application, list : List<Person>?)
         }
 
         private fun deleteById(id : Int){
-            val viewModel = ConversationViewModel(application)
-            viewModel.deletePerson(id)
+
+//            val factory = InjectorUtils.provideQuotesViewModelFactory(context.applicationContext)
+//
+//            val viewModel = ViewModelProviders.of(ConversationFragment().requireActivity(), factory)
+//                .get(ConversationViewModel::class.java)
+//
+//            viewModel.deletePerson(id)
+
+            Log.d(TAG,"Delete")
         }
     }
 }

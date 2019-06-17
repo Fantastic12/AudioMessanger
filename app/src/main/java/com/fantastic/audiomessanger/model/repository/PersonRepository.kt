@@ -1,23 +1,22 @@
 package com.fantastic.audiomessanger.model.repository
 
-import android.app.Application
 import android.arch.lifecycle.LiveData
-import com.fantastic.audiomessanger.model.dataBase.LocalDB
 import com.fantastic.audiomessanger.model.dataBase.dao.PersonDao
 import com.fantastic.audiomessanger.model.dataBase.entity.Person
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class PersonRepository(application: Application) {
+class PersonRepository private constructor(private val personDao : PersonDao) {
 
-    private val personDao : PersonDao
-    private val listPersons: LiveData<List<Person>>
+    companion object {
+        // Singleton instantiation you already know and love
+        @Volatile private var instance: PersonRepository? = null
 
-    init{
-        val db : LocalDB? = LocalDB.getInstance(application)
-        personDao = db?.personDao()!!
-        listPersons = personDao.getAllPersons()
+        fun getInstance(personDao : PersonDao) =
+            instance ?: synchronized(this) {
+                instance ?: PersonRepository(personDao).also { instance = it }
+            }
     }
 
     fun addPerson(person: Person){
@@ -30,7 +29,7 @@ class PersonRepository(application: Application) {
     }
 
     fun getAllPersons() : LiveData<List<Person>> {
-        return listPersons
+        return personDao.getAllPersons()
     }
 
     fun deleteAllPersons(){

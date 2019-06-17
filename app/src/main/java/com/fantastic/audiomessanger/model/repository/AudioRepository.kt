@@ -1,23 +1,22 @@
 package com.fantastic.audiomessanger.model.repository
 
-import android.app.Application
 import android.arch.lifecycle.LiveData
-import com.fantastic.audiomessanger.model.dataBase.LocalDB
 import com.fantastic.audiomessanger.model.dataBase.dao.AudioMessageDao
 import com.fantastic.audiomessanger.model.dataBase.entity.AudioMessage
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class AudioRepository(application: Application) {
+class AudioRepository private constructor(private val audioMessageDao: AudioMessageDao) {
 
-    private val audioMessageDao : AudioMessageDao
-    private val listAudioMessages: LiveData<List<AudioMessage>>
+    companion object {
+        // Singleton instantiation you already know and love
+        @Volatile private var instance: AudioRepository? = null
 
-    init{
-        val db : LocalDB? = LocalDB.getInstance(application)
-        audioMessageDao = db?.audioMessageDao()!!
-        listAudioMessages = audioMessageDao.getAllAudioMessages()
+        fun getInstance(audioMessageDao: AudioMessageDao) =
+            instance ?: synchronized(this) {
+                instance ?: AudioRepository(audioMessageDao).also { instance = it }
+            }
     }
 
     fun addAudioMessage(audioMessage: AudioMessage){
@@ -30,7 +29,7 @@ class AudioRepository(application: Application) {
     }
 
     fun getAllAudioMessages() : LiveData<List<AudioMessage>>{
-        return listAudioMessages
+        return audioMessageDao.getAllAudioMessages()
     }
 
 }
