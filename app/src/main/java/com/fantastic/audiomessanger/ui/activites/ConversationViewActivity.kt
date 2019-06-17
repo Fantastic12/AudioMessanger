@@ -16,12 +16,12 @@ class ConversationViewActivity : AppCompatActivity(), MainNavigator {
         setContentView(R.layout.conversation_view_activity)
 
         if (savedInstanceState == null) {
-            openFragment(fragmentMain)
+            startFragment(fragmentMain,false)
         }
 
     }
 
-    override fun openFragment(fragment: Fragment) {
+    override fun startFragment(fragment: Fragment, hide: Boolean) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container1, fragment)
             .commitNow()

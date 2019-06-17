@@ -4,5 +4,5 @@ import android.support.v4.app.Fragment
 
 interface MainNavigator {
 
-    fun openFragment(fragment : Fragment)
+    fun startFragment(fragment : Fragment, hide : Boolean)
 }
