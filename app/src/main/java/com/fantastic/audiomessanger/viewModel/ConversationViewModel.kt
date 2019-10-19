@@ -1,9 +1,5 @@
 package com.fantastic.audiomessanger.viewModel
 
-import android.app.Activity
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.media.MediaRecorder
@@ -17,10 +13,11 @@ import com.fantastic.audiomessanger.model.repository.PersonRepository
 import java.io.IOException
 import java.util.*
 
-class ConversationViewModel(private val context: Context,
-                            private val audioRepository: AudioRepository,
-                            private val personRepository: PersonRepository)
-    : ViewModel() {
+class ConversationViewModel(
+    private val context: Context,
+    private val audioRepository: AudioRepository,
+    private val personRepository: PersonRepository
+) : ViewModel() {
 
     private var output: String? = null
     private var mediaRecorder: MediaRecorder? = null
@@ -34,7 +31,7 @@ class ConversationViewModel(private val context: Context,
             e.printStackTrace()
         }
         mediaRecorder?.start()
-        Toast.makeText(context,"start", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "start", Toast.LENGTH_LONG).show()
     }
 
     fun stopAndSaveAudio() {
@@ -43,12 +40,13 @@ class ConversationViewModel(private val context: Context,
         mediaRecorder?.release()
         mediaRecorder = null
         saveAudio()
-        Toast.makeText(context,"stop", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "stop", Toast.LENGTH_LONG).show()
     }
 
-    fun initMediaRecorder(){
+    fun initMediaRecorder() {
         mediaRecorder = MediaRecorder()
-        output = Environment.getExternalStorageDirectory().absolutePath + "/" + generateRandomName() + ".mp3"
+        output =
+            Environment.getExternalStorageDirectory().absolutePath + "/" + generateRandomName() + ".mp3"
 
         mediaRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
         mediaRecorder?.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
@@ -56,7 +54,7 @@ class ConversationViewModel(private val context: Context,
         mediaRecorder?.setOutputFile(output)
     }
 
-    private fun generateRandomName() : String{
+    private fun generateRandomName(): String {
         return UUID.randomUUID().toString()
     }
 
@@ -71,11 +69,11 @@ class ConversationViewModel(private val context: Context,
         val person = Person()
         person.namePerson = generateRandomName()
         Log.d("Person", person.namePerson)
-        Toast.makeText(context,"start", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "start", Toast.LENGTH_LONG).show()
         personRepository.addPerson(person)
     }
 
-    fun deletePerson(id : Int){
+    fun deletePerson(id: Int) {
         personRepository.deletePerson(id)
     }
 
@@ -83,7 +81,7 @@ class ConversationViewModel(private val context: Context,
 
     fun getAllPersons() = personRepository.getAllPersons()
 
-    fun deleteAllPersons(){
+    fun deleteAllPersons() {
 
     }
 

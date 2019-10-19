@@ -23,89 +23,88 @@ import kotlinx.android.synthetic.main.conversation_fragment.*
 
 class ConversationFragment : Fragment() {
 
-        private var isClickedRecordAudio = false
+    private var isClickedRecordAudio = false
 
-        private var adapter = AudioListAdapter(emptyList())
-        private var adapterPerson = PersonListAdapter(Application(), emptyList())
+    private var adapter = AudioListAdapter(emptyList())
+    private var adapterPerson = PersonListAdapter(Application(), emptyList())
 
-        private lateinit var viewModel: ConversationViewModel
+    private lateinit var viewModel: ConversationViewModel
 
-        companion object {
-            fun newInstance() = ConversationFragment()
-        }
+    companion object {
+        fun newInstance() = ConversationFragment()
+    }
 
-        override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-            val factory = InjectorUtils.provideQuotesViewModelFactory(context!!.applicationContext)
+        val factory = InjectorUtils.provideQuotesViewModelFactory(context!!.applicationContext)
 
-            viewModel = ViewModelProviders.of(this, factory)
-                .get(ConversationViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, factory)
+            .get(ConversationViewModel::class.java)
 
-            return inflater.inflate(R.layout.conversation_fragment, container, false)
-        }
+        return inflater.inflate(R.layout.conversation_fragment, container, false)
+    }
 
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            super.onViewCreated(view, savedInstanceState)
-            initRecycleView()
-            initListeners()
-            initObservers()
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecycleView()
+        initListeners()
+        initObservers()
+    }
 
-        private fun initObservers() {
-            viewModel.getAllAudioMessages().observe(viewLifecycleOwner, Observer { audioMessages ->
-                adapter.setAudioMessages(audioMessages!!)
-            })
+    private fun initObservers() {
+        viewModel.getAllAudioMessages().observe(viewLifecycleOwner, Observer { audioMessages ->
+            adapter.setAudioMessages(audioMessages!!)
+        })
 
-            viewModel.getAllPersons().observe(viewLifecycleOwner, Observer { persons ->
-                persons?.let { adapterPerson.setPersons(it) }
-            })
-        }
+        viewModel.getAllPersons().observe(viewLifecycleOwner, Observer { persons ->
+            persons?.let { adapterPerson.setPersons(it) }
+        })
+    }
 
-        private fun initListeners() {
-            recordAudioButton.setOnClickListener {
-                if (ContextCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.RECORD_AUDIO
-                    ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    val permissions = arrayOf(
-                        Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    )
-                    ActivityCompat.requestPermissions(requireActivity(), permissions, 0)
-                } else {
-                    viewModel.initMediaRecorder()
-                    viewModel.startRecording()
-                    isClickedRecordAudio = true
-                    Toast.makeText(context, "start record", Toast.LENGTH_LONG).show()
-                }
+    private fun initListeners() {
+        recordAudioButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.RECORD_AUDIO
+                ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                val permissions = arrayOf(
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                ActivityCompat.requestPermissions(requireActivity(), permissions, 0)
+            } else {
+                viewModel.initMediaRecorder()
+                viewModel.startRecording()
+                isClickedRecordAudio = true
+                Toast.makeText(context, "start record", Toast.LENGTH_LONG).show()
             }
-            stopAndSaveButton.setOnClickListener {
-                if (isClickedRecordAudio) {
-                    viewModel.stopAndSaveAudio()
-                    isClickedRecordAudio = false
-                } else {
-                    Toast.makeText(context, "Please start record", Toast.LENGTH_LONG).show()
-                }
+        }
+        stopAndSaveButton.setOnClickListener {
+            if (isClickedRecordAudio) {
+                viewModel.stopAndSaveAudio()
+                isClickedRecordAudio = false
+            } else {
+                Toast.makeText(context, "Please start record", Toast.LENGTH_LONG).show()
             }
-            addPersonButton.setOnClickListener { viewModel.addPerson() }
         }
+        addPersonButton.setOnClickListener { viewModel.addPerson() }
+    }
 
-        private fun initRecycleView() {
-            recyclerView.layoutManager = LinearLayoutManager(requireContext())
-            recyclerView.adapter = adapter
+    private fun initRecycleView() {
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = adapter
 
-            recyclerViewPerson.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            recyclerViewPerson.adapter = adapterPerson
-        }
+        recyclerViewPerson.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewPerson.adapter = adapterPerson
     }
 }
