@@ -14,51 +14,51 @@ import android.view.View
 import android.view.ViewGroup
 import com.fantastic.audiomessanger.R
 import com.fantastic.audiomessanger.databinding.MainFragmentBinding
-import com.fantastic.audiomessanger.interfaces.ListenerFragment
-import com.fantastic.audiomessanger.model.dataBase.entity.Conversation
 import com.fantastic.audiomessanger.ui.adapters.ConversationListAdapter
 import com.fantastic.audiomessanger.viewModel.MainViewModel
-import kotlinx.android.synthetic.main.main_fragment.view.*
-import com.fantastic.audiomessanger.ui.fragments.MainFragment.OpenNewFragment as OpenNewFragment1
+import kotlinx.android.synthetic.main.main_fragment.*
 
-class MainFragment : Fragment(), ListenerFragment {
+class MainFragment : Fragment() {
 
-    private lateinit var openNewFragment : OpenNewFragment
+    private lateinit var openNewFragment: OpenNewFragment
 
-    private var adapter : ConversationListAdapter? = null
-    private var recyclerView : RecyclerView? = null
-    private lateinit var linearLayoutManager : LinearLayoutManager
-    private lateinit var viewModel : MainViewModel
+    private var adapter = ConversationListAdapter(Application(), ArrayList())
+    private lateinit var viewModel: MainViewModel
 
     companion object {
         fun newInstance() = MainFragment()
     }
 
-    interface OpenNewFragment{
+    interface OpenNewFragment {
         fun openFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
-            : View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        val binding : MainFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
-        val view : View  = binding.root
+        val binding: MainFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
+        val view: View = binding.root
 
         binding.viewModel = viewModel
-
-        onListener(view)
-        initRecycleView(view)
-
-        viewModel.allConversations.observe(this,
-            Observer<List<Conversation>> { t -> adapter!!.setConversation(t!!) })
 
         return view
     }
 
-    override fun onListener(view: View) {
-        view.fab.setOnClickListener {
-            openNewFragment.openFragment()
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecycleView()
+        initListeners()
+        viewModel.allConversations.observe(
+            viewLifecycleOwner,
+            Observer { t -> t?.let { adapter.setConversation(it) } })
+    }
+
+    private fun initListeners() {
+        fab.setOnClickListener { openNewFragment.openFragment() }
     }
 
     override fun onAttach(context: Context?) {
@@ -66,12 +66,9 @@ class MainFragment : Fragment(), ListenerFragment {
         openNewFragment = activity as OpenNewFragment
     }
 
-    private fun initRecycleView(view: View){
-        adapter = ConversationListAdapter(Application(),ArrayList())
-        linearLayoutManager = LinearLayoutManager(requireContext())
-        recyclerView = view.findViewById(R.id.list_conversation)
-        recyclerView!!.layoutManager = linearLayoutManager
-        recyclerView!!.adapter = adapter
+    private fun initRecycleView() {
+        list_conversation.layoutManager = LinearLayoutManager(requireContext())
+        list_conversation.adapter = adapter
     }
 
 }

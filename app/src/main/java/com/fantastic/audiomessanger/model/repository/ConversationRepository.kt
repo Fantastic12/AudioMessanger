@@ -15,8 +15,8 @@ class ConversationRepository(application: Application) {
     private val listConversation : LiveData<List<Conversation>>
 
     init{
-        val db : LocalDB? = LocalDB.getInstance(application)
-        conversationDao = db?.conversationDao()!!
+        val db : LocalDB = LocalDB.getInstance(application)
+        conversationDao = db.conversationDao()
         listConversation = conversationDao.getAllConversation()
     }
 
