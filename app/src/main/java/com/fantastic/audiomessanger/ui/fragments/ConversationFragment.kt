@@ -1,6 +1,7 @@
 package com.fantastic.audiomessanger.ui.fragments
 
 import android.Manifest
+import android.app.Activity
 import android.app.Application
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -15,10 +16,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.fantastic.audiomessanger.R
+import com.fantastic.audiomessanger.interfaces.ListenerFragment
 import com.fantastic.audiomessanger.ui.adapters.AudioListAdapter
 import com.fantastic.audiomessanger.ui.adapters.PersonListAdapter
+import com.fantastic.audiomessanger.utils.InjectorUtils
 import com.fantastic.audiomessanger.viewModel.ConversationViewModel
 import kotlinx.android.synthetic.main.conversation_fragment.*
+import kotlinx.android.synthetic.main.conversation_fragment.view.*
+
+class ConversationFragment : Fragment(), ListenerFragment{
 
 class ConversationFragment : Fragment() {
 
@@ -33,15 +39,22 @@ class ConversationFragment : Fragment() {
         fun newInstance() = ConversationFragment()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
-        return inflater.inflate(R.layout.conversation_fragment, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
+            : View? {
 
+        val factory = InjectorUtils.provideQuotesViewModelFactory(context!!.applicationContext)
+
+        viewModel = ViewModelProviders.of(this, factory)
+            .get(ConversationViewModel::class.java)
+
+        val view : View = inflater.inflate(R.layout.conversation_fragment, container, false)
+
+        initRecycleView(view)
+        onListener(view)
+
+        viewModel.getAllAudioMessages().observe(this, Observer {
+                audioMessages -> adapter!!.setAudioMessages(audioMessages!!)
+        })
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycleView()
@@ -49,6 +62,15 @@ class ConversationFragment : Fragment() {
         initObservers()
     }
 
+        viewModel.getAllPersons().observe(this, Observer {
+            persons -> adapterPerson!!.setPersons(persons!!)
+        })
+
+//        viewModel.allAudioMessages.observe(this,
+//            Observer<List<AudioMessage>> { t -> adapter!!.setAudioMessages(t!!) })
+//
+//        viewModel.allPersons.observe(this,
+//            Observer<List<Person>> { t -> adapterPerson!!.setPersons(t!!) })
     private fun initObservers() {
         viewModel.allAudioMessages.observe(viewLifecycleOwner,
             Observer { t -> t?.let { adapter.setAudioMessages(it) } })
@@ -77,6 +99,7 @@ class ConversationFragment : Fragment() {
                 viewModel.initMediaRecorder()
                 viewModel.startRecording()
                 isClickedRecordAudio = true
+                Toast.makeText(context,"start record",Toast.LENGTH_LONG).show()
             }
         }
         stopAndSaveButton.setOnClickListener {
